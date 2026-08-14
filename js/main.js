@@ -1,35 +1,29 @@
 document.addEventListener('DOMContentLoaded', () => {
 
   // --- 1. CLOCK, DATE & GREETING ---
-  const clockEl = document.getElementById('clock');
-  const dateDisplayEl = document.getElementById('date-display'); // Elemen Tanggal Baru
   const greetingEl = document.getElementById('greeting');
-  const nameInput = document.getElementById('user-name-input');
-  const saveNameBtn = document.getElementById('save-name-btn');
 
-  function updateClock() {
-    const now = new Date();
-    
-    // 1. Jam
-    clockEl.textContent = now.toLocaleTimeString('id-ID');
-    
-    // 2. Tanggal (Format: Hari, Tanggal Bulan Tahun)
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    dateDisplayEl.textContent = now.toLocaleDateString('id-ID', options);
+function updateGreeting() {
+  const hours = new Date().getHours();
+  let greetingText = 'Selamat Datang! ✨';
 
-    // 3.Update Salam / Greeting
-    const hours = now.getHours();
-    let timeGreeting = 'Selamat Malam 🌙';
-    if (hours < 11) timeGreeting = 'Selamat Pagi ☀️';
-    else if (hours < 15) timeGreeting = 'Selamat Siang 🌤️';
-    else if (hours < 18) timeGreeting = 'Selamat Sore 🌅';
-
-    const savedName = localStorage.getItem('dashboard_user_name') || '';
-    greetingEl.textContent = savedName ? `${timeGreeting}, ${savedName}! 💕` : `${timeGreeting}! 💕`;
+  if (hours >= 5 && hours < 12) {
+    greetingText = 'Selamat Pagi! ☀️';
+  } else if (hours >= 12 && hours < 15) {
+    greetingText = 'Selamat Siang! 🌤️';
+  } else if (hours >= 15 && hours < 18) {
+    greetingText = 'Selamat Sore! 🌆';
+  } else {
+    greetingText = 'Selamat Malam! 🌙';
   }
-  setInterval(updateClock, 1000);
-  updateClock();
 
+  if (greetingEl) {
+    greetingEl.textContent = greetingText;
+  }
+}
+
+// Panggil fungsi salam
+updateGreeting();
   // --- 2. LIGHT / DARK MODE TOGGLE ---
   const themeToggleBtn = document.getElementById('theme-toggle');
   const currentTheme = localStorage.getItem('dashboard_theme');
@@ -171,7 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const div = document.createElement('div');
       div.className = 'link-item';
       div.innerHTML = `
-        <a href="${link.url}" target="_blank">🌸 ${link.title}</a>
+        <a href="${link.url}" target="_blank"> ${link.title}</a>
         <span class="delete-link-btn" onclick="deleteLink(${index})">✕</span>
       `;
       linksContainer.appendChild(div);
